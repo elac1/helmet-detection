@@ -1,0 +1,67 @@
+# 安全帽佩戴检测系统默认配置
+
+model:
+  path: models/best.pt
+  device: auto          # auto / cpu / 0 / cuda:0
+  conf: 0.35
+  iou: 0.45
+  imgsz: 640
+  max_det: 100
+  half: false
+  verbose: false
+
+# 数据集类别别名（不区分大小写，连字符与空格会统一为下划线）
+classes:
+  person: [Person, person, worker]
+  helmet: [helmet, hardhat, Helmet, Hardhat]
+  no_helmet: [no_helmet, no-hardhat, no_hardhat, NO-Hardhat, NO_Hardhat]
+
+association:
+  head_height_ratio: 0.38       # Person 框顶部 38% 视为头部区域
+  head_width_shrink: 0.12       # 头部区域左右各内缩 12%
+  head_top_margin: 0.08         # 头部区域向上扩展 8%，兼容安全帽框略高于 Person 框
+  min_match_score: 0.28
+  min_head_iou: 0.03
+  min_coverage: 0.10
+  min_person_confidence: 0.35
+  min_helmet_confidence: 0.25
+  min_no_helmet_confidence: 0.25
+  max_normalized_distance: 1.10
+  max_evidence_area_ratio: 2.50
+  conflict_policy: unknown      # 同时匹配到 helmet/no_helmet 时: unknown / violation
+  unmatched_policy: unknown     # 无任何头部证据时: unknown / violation
+
+render:
+  language: zh
+  show_labels: true
+  show_confidence: true
+  show_head_region: false
+  show_stats_panel: true
+  show_alert_banner: true
+  show_unmatched_detections: true
+  show_other_detections: false
+  font_path: null
+  line_thickness: 2
+
+alert:
+  enabled: true
+  cooldown_seconds: 5.0
+  event_ttl_seconds: 6.0
+  event_iou_threshold: 0.20
+  min_violations: 1
+  console: true
+  terminal_bell: false
+  snapshot_on_new_event: true
+  max_snapshots_per_event: 3
+  webhook_url: null
+
+output:
+  dir: outputs
+  save_annotated: true
+  save_csv: true
+  save_json: false
+  save_violation_snapshots: true
+  display: false
+  max_width: 1280
+  video_codec: mp4v
+  jpeg_quality: 92
